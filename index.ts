@@ -1,5 +1,6 @@
 import express from 'express';
 import cheerio from 'cheerio';
+import fetch from 'node-fetch';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,8 +16,9 @@ async function fetchStuffs(url: string) {
     $(`meta[name="twitter:${name}"]`).attr('content') ||
     $(`meta[property="og:${name}"]`).attr('content');
 
-  const faviconRelative = $('link[rel="shortcut icon"]').attr('href') || $('link[rel="icon"]').attr('href');
-  const faviconFull = new URL(url).origin + faviconRelative
+  const faviconRelative =
+    $('link[rel="shortcut icon"]').attr('href') || $('link[rel="icon"]').attr('href');
+  const faviconFull = new URL(url).origin + faviconRelative;
 
   const info = {
     url,
@@ -32,9 +34,9 @@ async function fetchStuffs(url: string) {
 app.get('/', (req, res) => {
   res.json({
     msg: 'Welcome to sticky-md-scraper! 🎉',
-    instructions: "Send your url to '/api?url={insert_here}' as a GET request."
-  })
-})
+    instructions: "Send your url to '/api?url={insert_here}' as a GET request.",
+  });
+});
 
 app.get('/api', async (req, res) => {
   const url = req.query.url as string;
