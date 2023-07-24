@@ -1,4 +1,4 @@
-# sticky-md Scraper
+# sticky-md-scraper
 #### A simple web scraper to preview links
 
 `sticky-md` send URLs here and receive metadata (`url`, `title`, `description`,…) for previewing links.

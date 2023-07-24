@@ -29,9 +29,17 @@ async function fetchStuffs(url: string) {
   return info;
 }
 
+app.get('/', (req, res) => {
+  res.json({
+    msg: 'Welcome to sticky-md-scraper! 🎉',
+    instructions: "Send your url to '/api?url={insert_here}' as a GET request."
+  })
+})
+
 app.get('/api', async (req, res) => {
   const url = req.query.url as string;
   const data = await fetchStuffs(url);
+  console.log(data);
   res.json(data);
 });
 
