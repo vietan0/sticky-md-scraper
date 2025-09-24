@@ -50,16 +50,33 @@ async function fetchStuffs(url: string) {
       $(`meta[name="twitter:${name}"]`).attr('content') ||
       $(`meta[property="og:${name}"]`).attr('content');
 
-    const faviconRelative =
-      $('link[rel="shortcut icon"]').attr('href') || $('link[rel="icon"]').attr('href');
-    const faviconFull = new URL(url).origin + faviconRelative;
+    const imgLink = getMetatag('image');
+    const imgLinkFull = imgLink 
+      ? imgLink.startsWith('https://') ? imgLink : new URL(url).origin + imgLink 
+      : undefined;
+
+    const favLink =
+      $('link[rel="icon"][type="image/svg+xml"]').attr('href') ||
+      $('link[rel="apple-touch-icon"][sizes="96x96"]').attr('href') ||
+      $('link[rel="apple-touch-icon"][sizes="48x48"]').attr('href') ||
+      $('link[rel="apple-touch-icon"][sizes="32x32"]').attr('href') ||
+      $('link[rel="apple-touch-icon"]').attr('href') ||
+      $('link[rel="icon"][sizes="96x96"]').attr('href') ||
+      $('link[rel="icon"][sizes="48x48"]').attr('href') ||
+      $('link[rel="icon"][sizes="32x32"]').attr('href') ||
+      $('link[rel="icon"]').attr('href') ||
+      $('link[rel="shortcut icon"]').attr('href');
+
+      const favLinkFull = favLink 
+        ? favLink.startsWith('https://') ? favLink : new URL(url).origin + favLink 
+        : undefined;
 
     const info = {
       url,
       title: $('title').first().text(),
-      favicon: faviconFull,
+      favicon: favLinkFull,
       description: getMetatag('description'),
-      image: getMetatag('image'),
+      image: imgLinkFull,
       author: getMetatag('author'),
     };
     return info;
@@ -85,5 +102,5 @@ app.get('/api', cors(corsOptionsDelegate), async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  return console.log(`Express is listening at http://localhost:${PORT} !`);
+  return console.log(`Express is listening at http://localhost:${PORT}`);
 });
