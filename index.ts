@@ -56,6 +56,7 @@ async function fetchStuffs(url: string) {
       : undefined;
 
     const favLink =
+      $('meta[itemprop="image"]').attr('content') ||
       $('link[rel="icon"][type="image/svg+xml"]').attr('href') ||
       $('link[rel="apple-touch-icon"][sizes="96x96"]').attr('href') ||
       $('link[rel="apple-touch-icon"][sizes="48x48"]').attr('href') ||
